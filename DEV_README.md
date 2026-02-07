@@ -42,93 +42,18 @@ The extension zip must include:
 
 ### Manual Build
 ```bash
-# Create clean build directory
-rm -rf build/
-mkdir -p build/
-
-# Copy required files
-cp manifest.json build/
-cp background.js build/
-cp content.js build/
-cp inject.js build/
-cp popup.html build/
-cp popup.js build/
-cp icon-*.png build/
-cp README.md build/
-
-# Create zip for Chrome Web Store
-cd build
-zip -r ../playback-rate-unlocker.zip .
-cd ..
-
-echo "✓ Package created: playback-rate-unlocker.zip"
+# Create zip excluding development files
+zip -r enhanced-video-audio-speed.zip . \
+  -x ".*" \
+  -x "__MACOSX/*" \
+  -x "*.DS_Store" \
+  -x "*.zip" \
+  -x ".git/*" \
+  -x "*.md" \
+  -x "*.sh"
 ```
 
-## Build Script Setup
-
-Save the following as `build.sh` in the project root:
-
-```bash
-#!/bin/bash
-
-# Playback Rate Unlocker - Chrome Web Store Build Script
-
-set -e  # Exit on error
-
-# Colors for output
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-echo -e "${BLUE}Building Playback Rate Unlocker for Chrome Web Store...${NC}"
-
-# Clean previous build
-echo "Cleaning previous build..."
-rm -rf build/
-rm -f playback-rate-unlocker.zip
-
-# Create build directory
-echo "Creating build directory..."
-mkdir -p build/
-
-# Copy required files
-echo "Copying extension files..."
-cp manifest.json build/
-cp background.js build/
-cp content.js build/
-cp inject.js build/
-cp popup.html build/
-cp popup.js build/
-cp icon-16.png build/
-cp icon-48.png build/
-cp icon-128.png build/
-cp README.md build/
-
-# Create zip
-echo "Creating zip archive..."
-cd build
-zip -r -q ../playback-rate-unlocker.zip .
-cd ..
-
-# Get zip size
-SIZE=$(du -h playback-rate-unlocker.zip | cut -f1)
-
-echo -e "${GREEN}✓ Build complete!${NC}"
-echo ""
-echo "Package: playback-rate-unlocker.zip"
-echo "Size: $SIZE"
-echo ""
-echo "Ready to upload to Chrome Web Store Developer Dashboard:"
-echo "https://chrome.google.com/webstore/devconsole"
-
-# Clean up build directory
-rm -rf build/
-```
-
-Make it executable:
-```bash
-chmod +x build.sh
-```
+The build script (`build.sh`) automates this process. It's already executable in the repository.
 
 ## Chrome Web Store Submission Checklist
 
