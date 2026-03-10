@@ -309,15 +309,48 @@
       line-height: 1.6;
     }
 
+    /* ── Perfect For ── */
+    .perfect-for {
+      padding: 80px 24px;
+    }
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .audience-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 20px;
+    }
+    .audience-icon {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+    .audience-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .audience-card p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     /* ── How it works ── */
     .how {
       padding: 80px 24px;
+      background: var(--bg-alt);
     }
     .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 32px;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
       counter-reset: step;
     }
@@ -460,6 +493,7 @@
       <a href="/" class="nav-logo">Play<span>Faster</span></a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#perfect-for">Who's it for</a></li>
         <li><a href="#how-it-works">How it works</a></li>
         <li><a href="#privacy">Privacy</a></li>
       </ul>
@@ -552,11 +586,50 @@
     </div>
   </section>
 
+  <!-- Perfect For -->
+  <section class="perfect-for" id="perfect-for">
+    <p class="section-label">Perfect For</p>
+    <h2 class="section-title">Built for everyone<br>who values their time.</h2>
+    <p class="section-sub" style="margin-bottom: 48px;">Whether you're learning, working, or listening — PlayFaster keeps up with you.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon">🎓</div>
+        <h3>Students</h3>
+        <p>Blast through lectures on material you already know, then slow down for the hard parts.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">💼</div>
+        <h3>Professionals</h3>
+        <p>Get through mandatory training videos in a fraction of the time.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🎬</div>
+        <h3>Content Creators</h3>
+        <p>Preview and review your own footage faster without missing anything.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🎧</div>
+        <h3>Podcast Listeners</h3>
+        <p>Push past 2x on podcast players that artificially cap your speed.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">♿</div>
+        <h3>Accessibility Needs</h3>
+        <p>Process audio better at a speed that works for you — slower or faster.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">⚡</div>
+        <h3>Power Users</h3>
+        <p>You consume a lot of video. Every second saved adds up to hours reclaimed.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- How it works -->
   <section class="how" id="how-it-works">
     <p class="section-label">How it works</p>
     <h2 class="section-title">Up and running in seconds</h2>
-    <p class="section-sub" style="margin-bottom: 48px;">Three steps and you'll never be stuck at 2x again.</p>
+    <p class="section-sub" style="margin-bottom: 48px;">Install once. Your speed follows you everywhere.</p>
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
@@ -565,13 +638,23 @@
       </div>
       <div class="step">
         <div class="step-num">2</div>
-        <h3>Pick your speed</h3>
-        <p>Click the extension icon and set your preferred playback rate.</p>
+        <h3>Open the popup</h3>
+        <p>Click the extension icon on any page with video or audio.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
-        <h3>Watch faster</h3>
-        <p>PlayFaster applies your speed automatically on every page — even in embedded iframes.</p>
+        <h3>Use &lt; &gt; buttons</h3>
+        <p>Tap <strong>&lt;</strong> / <strong>&gt;</strong> to step by 0.1x, or <strong>&lt;&lt;</strong> / <strong>&gt;&gt;</strong> to jump by 0.5x.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>Type or scroll</h3>
+        <p>Enter any value from 0.1 to 16 directly, or scroll your mouse wheel to nudge the speed.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <h3>It remembers</h3>
+        <p>Your preference is saved automatically — same speed, every page, every restart.</p>
       </div>
     </div>
   </section>
