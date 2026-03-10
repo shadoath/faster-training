@@ -134,7 +134,7 @@ WebNavigation:
 Required to detect when pages with video/audio content load so we can apply your speed preference automatically.
 
 Host Permissions (<all_urls>):
-Required because the extension works on all video platforms (YouTube, Vimeo, Loom, training sites, etc.). Videos are often embedded in iframes from different domains, so we need broad access to apply speed controls across all frames.
+activeTab cannot be used here because the extension must apply the user's saved speed preference automatically at page load (document_start), before any user gesture occurs. Additionally, videos on training platforms are frequently embedded in cross-origin iframes (e.g. a course page on one domain embeds a video player from another domain). Chrome's content script injection with all_frames: true requires host permissions for every frame origin, which are unknown in advance and vary by platform. There is no narrower permission that achieves this functionality.
 
 
 SINGLE PURPOSE DESCRIPTION
@@ -209,8 +209,8 @@ Mouse wheel support and 0.1x precision for perfect speed tuning
 RESPONSE TO COMMON REVIEW QUESTIONS
 -------------------------------------
 
-Q: Why does this need access to all websites?
-A: This extension works on all video platforms (YouTube, Vimeo, Loom, training sites, etc.) and videos are often embedded in iframes from different domains. The <all_urls> permission allows the extension to apply speed controls to videos regardless of where they're hosted or embedded.
+Q: Why does this need access to all websites? Why not use activeTab?
+A: The activeTab permission only grants access when the user explicitly clicks the extension icon - it cannot apply the saved speed preference automatically at page load. This extension must run at document_start so the playback rate override is in place before any media begins playing. Furthermore, videos are routinely embedded in cross-origin iframes (e.g. a training site on one domain embedding a video player from another). Chrome requires explicit host permissions to inject content scripts into each iframe origin, which cannot be known in advance. The <all_urls> permission is the minimum required for the extension to function correctly.
 
 Q: Why does this modify page behavior?
 A: This is a video speed controller - modifying playback speed is its core functionality. It only modifies HTMLMediaElement playback rates and does not change any other page content or behavior.
