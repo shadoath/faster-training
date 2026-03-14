@@ -61,7 +61,7 @@ The build script (`build.sh`) automates this process. It's already executable in
 ### 1. Test the Extension
 - [ ] Load unpacked version in `chrome://extensions` with Developer mode
 - [ ] Test on target e-learning platform
-- [ ] Test playback rate selection (2x, 2.5x, 3x, 4x)
+- [ ] Test playback rate selection (0.1x–16x range, increment buttons, mouse wheel)
 - [ ] Verify rate persists across page reloads
 - [ ] Check for console errors
 
@@ -165,7 +165,7 @@ A complete privacy policy has been created in `PRIVACY.md`.
 
 **To use it in the Chrome Web Store:**
 1. Push `PRIVACY.md` to your GitHub repository
-2. Get the raw GitHub URL (e.g., `https://github.com/yourusername/play-faster/blob/master/PRIVACY.md`)
+2. Get the raw GitHub URL: `https://github.com/Whiteboard-Works/play-faster/blob/master/PRIVACY.md`
 3. Paste this URL in the "Privacy Policy" field during Chrome Web Store submission
 
 **Summary:** The extension collects NO data. It only stores your playback speed preference locally on your device.

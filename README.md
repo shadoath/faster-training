@@ -71,7 +71,7 @@ This extension:
 
 ## Support
 
-If you encounter any issues or have suggestions, please open an issue on GitHub.
+If you encounter any issues or have suggestions, please [open an issue on GitHub](https://github.com/Whiteboard-Works/play-faster/issues) or email [info@playfaster.app](mailto:info@playfaster.app).
 
 ## License
 

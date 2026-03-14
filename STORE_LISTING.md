@@ -78,8 +78,7 @@ All data stays on your device. No information ever leaves your computer.
 Last updated: February 2026
 
 Privacy Policy URL:
-https://github.com/yourusername/faster-training/blob/master/PRIVACY.md
-(Replace "yourusername" with your actual GitHub username.)
+https://github.com/Whiteboard-Works/play-faster/blob/master/PRIVACY.md
 
 
 PROMOTIONAL TILE TEXT (for images)
@@ -162,13 +161,13 @@ SUPPORT INFORMATION
 -------------------
 
 Support Email:
-your-email@example.com
+info@playfaster.app
 
 Support URL:
-https://github.com/yourusername/faster-training/issues
+https://github.com/Whiteboard-Works/play-faster/issues
 
 Homepage URL:
-https://github.com/yourusername/faster-training
+https://playfaster.app/
 
 
 VERSION HISTORY
