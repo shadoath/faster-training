@@ -9,7 +9,7 @@ Extension Name:
 PlayFaster
 
 Short Description (132 characters max):
-Fine-tune video & audio playback speed from 0.1x to 16x. Perfect for power users, fast learners, and accessibility needs.
+Fine-tune video & audio playback speed from 0.1x to 64x. Perfect for power users, fast learners, and accessibility needs.
 
 Category:
 Productivity
@@ -24,7 +24,7 @@ DETAILED DESCRIPTION
 PlayFaster gives you complete control over media playback speed across all websites.
 
 FEATURES:
-• Wide speed range: 0.1x to 16x playback
+• Wide speed range: 0.1x to 64x playback
 • Fine-grained controls: adjust by 0.1x or 0.5x increments
 • Direct input: type any speed value for precision
 • Mouse wheel support: scroll to adjust speed quickly
@@ -41,7 +41,7 @@ PERFECT FOR:
 HOW TO USE:
 1. Click the extension icon while on any video or audio page
 2. Adjust speed using buttons (< > for 0.1x, << >> for 0.5x)
-3. Or type any value directly (0.1 to 16)
+3. Or type any value directly (0.1 to 64)
 4. Or scroll your mouse wheel to fine-tune
 5. Your preference automatically saves
 
@@ -85,7 +85,7 @@ PROMOTIONAL TILE TEXT (for images)
 -----------------------------------
 
 Control Your Speed
-0.1x to 16x
+0.1x to 64x
 
 Watch Smarter, Not Slower
 
@@ -178,7 +178,7 @@ Version 1.0.2
 • Renamed package to playfaster.zip
 
 Version 1.0 - Initial Release
-• Playback speed control from 0.1x to 16x
+• Playback speed control from 0.1x to 64x
 • Fine-grained increment/decrement buttons (0.1x and 0.5x)
 • Direct speed input with number field
 • Mouse wheel support for quick adjustments
@@ -196,7 +196,7 @@ Screenshot 2 - YouTube Example:
 Works seamlessly on YouTube and all major video platforms
 
 Screenshot 3 - Speed Range:
-Full range from 0.1x (slow motion) to 16x (ultra fast) playback
+Full range from 0.1x (slow motion) to 64x (ultra fast) playback
 
 Screenshot 4 - Training Platform:
 Perfect for e-learning and training videos

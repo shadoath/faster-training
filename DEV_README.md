@@ -61,7 +61,7 @@ The build script (`build.sh`) automates this process. It's already executable in
 ### 1. Test the Extension
 - [ ] Load unpacked version in `chrome://extensions` with Developer mode
 - [ ] Test on target e-learning platform
-- [ ] Test playback rate selection (0.1x–16x range, increment buttons, mouse wheel)
+- [ ] Test playback rate selection (0.1x–64x range, increment buttons, mouse wheel)
 - [ ] Verify rate persists across page reloads
 - [ ] Check for console errors
 
@@ -77,14 +77,14 @@ The build script (`build.sh`) automates this process. It's already executable in
 **Screenshot Tips:**
 - Show the popup interface with the speed input and increment/decrement buttons
 - Demonstrate use on popular platforms (YouTube, Vimeo, etc.)
-- Highlight the speed range (0.1x - 16x)
+- Highlight the speed range (0.1x - 64x)
 - Show before/after of speed controls on a video player
 
 #### Store Listing Text
 
 **Short description (132 characters max):**
 ```
-Fine-tune video & audio playback speed from 0.1x to 16x. Perfect for power users, fast learners, and accessibility needs.
+Fine-tune video & audio playback speed from 0.1x to 64x. Perfect for power users, fast learners, and accessibility needs.
 ```
 
 **Detailed description (400+ characters recommended):**
@@ -92,7 +92,7 @@ Fine-tune video & audio playback speed from 0.1x to 16x. Perfect for power users
 PlayFaster gives you complete control over media playback speed across all websites.
 
 FEATURES:
-• Wide speed range: 0.1x to 16x playback
+• Wide speed range: 0.1x to 64x playback
 • Fine-grained controls: adjust by 0.1x or 0.5x increments
 • Direct input: type any speed value for precision
 • Mouse wheel support: scroll to adjust speed quickly

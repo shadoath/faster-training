@@ -11,7 +11,7 @@ function round(val) {
 }
 
 function setRate(rate) {
-  rate = clamp(round(rate), 0.1, 16);
+  rate = clamp(round(rate), 0.1, 64);
   input.value = rate;
   chrome.storage.local.set({ playbackRate: rate });
 }
