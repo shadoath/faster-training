@@ -1,10 +1,11 @@
 // ---- Settings defaults (declared first so all handlers below can reference kbSettings safely) ----
 
 const DEFAULT_KB_SETTINGS = {
-  shortcut: { ctrl: true, shift: true, alt: false, key: '.' },
+  shortcut: { ctrl: true, shift: true, alt: false, key: 's' },
   smallStep: 0.1,
   largeStep: 0.5,
-  presets: [1, 1.5, 2, 3, 4]
+  minSpeed: 0.5,
+  maxSpeed: 4
 };
 
 // Fix #1: initialize synchronously so button handlers never see null/undefined
@@ -23,7 +24,7 @@ function round(val) {
 }
 
 function setRate(rate) {
-  rate = clamp(round(rate), 0.1, 64);
+  rate = clamp(round(rate), kbSettings.minSpeed, kbSettings.maxSpeed);
   input.value = rate;
   chrome.storage.local.set({ playbackRate: rate });
   // Fix #2: notify background to update badge even if service worker was dormant
@@ -56,8 +57,6 @@ const settingsPanel = document.getElementById('settingsPanel');
 const shortcutInput = document.getElementById('shortcutInput');
 const smallStepInput = document.getElementById('smallStep');
 const largeStepInput = document.getElementById('largeStep');
-const presetInputs = document.querySelectorAll('[data-preset]');
-
 let recordingShortcut = false;
 
 // Fix #8: handle special keys in shortcut display
@@ -76,22 +75,16 @@ function formatShortcut(sc) {
   return parts.join('+');
 }
 
-// Fix #3 & #6: deep merge presets so missing entries fall back to defaults
 function mergeSettings(saved) {
-  const merged = Object.assign({}, DEFAULT_KB_SETTINGS, saved);
-  merged.presets = DEFAULT_KB_SETTINGS.presets.map((def, i) =>
-    (saved.presets && saved.presets[i] != null) ? saved.presets[i] : def
-  );
-  return merged;
+  return Object.assign({}, DEFAULT_KB_SETTINGS, saved);
 }
 
 function populateSettings(s) {
   shortcutInput.value = formatShortcut(s.shortcut);
   smallStepInput.value = s.smallStep;
   largeStepInput.value = s.largeStep;
-  presetInputs.forEach(inp => {
-    inp.value = s.presets[parseInt(inp.dataset.preset)];
-  });
+  document.getElementById('minSpeed').value = s.minSpeed;
+  document.getElementById('maxSpeed').value = s.maxSpeed;
 }
 
 function saveSettings() {
@@ -164,18 +157,23 @@ largeStepInput.addEventListener('change', () => {
   }
 });
 
-// Preset inputs
-presetInputs.forEach(inp => {
-  inp.addEventListener('change', () => {
-    const v = parseFloat(inp.value);
-    if (!isNaN(v) && v >= 0.1 && v <= 64) {
-      kbSettings.presets[parseInt(inp.dataset.preset)] = round(v);
-      saveSettings();
-    }
-  });
+document.getElementById('minSpeed').addEventListener('change', (e) => {
+  const v = parseFloat(e.target.value);
+  if (!isNaN(v) && v >= 0.1 && v < kbSettings.maxSpeed) {
+    kbSettings.minSpeed = round(v);
+    saveSettings();
+  }
 });
 
-// Arrow keys and presets work while popup is open
+document.getElementById('maxSpeed').addEventListener('change', (e) => {
+  const v = parseFloat(e.target.value);
+  if (!isNaN(v) && v <= 64 && v > kbSettings.minSpeed) {
+    kbSettings.maxSpeed = round(v);
+    saveSettings();
+  }
+});
+
+// Arrow keys work while popup is open
 document.addEventListener('keydown', (e) => {
   const tag = document.activeElement?.tagName;
   if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
@@ -186,9 +184,6 @@ document.addEventListener('keydown', (e) => {
   } else if (e.key === 'ArrowDown') {
     e.preventDefault();
     setRate((parseFloat(input.value) || 2) - kbSettings.smallStep);
-  } else if (e.key >= '1' && e.key <= '5') {
-    const preset = kbSettings.presets[parseInt(e.key) - 1];
-    if (preset != null) setRate(preset);
   }
 });
 
@@ -196,6 +191,7 @@ document.addEventListener('keydown', (e) => {
 document.addEventListener('wheel', (e) => {
   if (e.target.closest('input, select, textarea')) return;
   e.preventDefault();
-  const delta = e.deltaY < 0 ? kbSettings.smallStep : -kbSettings.smallStep;
-  setRate((parseFloat(input.value) || 2) + delta);
+  const raw = e.shiftKey ? -e.deltaX : e.deltaY;
+  const step = e.shiftKey ? kbSettings.largeStep : kbSettings.smallStep;
+  setRate((parseFloat(input.value) || 2) + (raw < 0 ? step : -step));
 }, { passive: false });

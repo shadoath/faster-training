@@ -4,18 +4,15 @@ let kbSettings = null
 let isActive = false
 
 const DEFAULTS = {
-  shortcut: { ctrl: true, shift: true, alt: false, key: '.' },
+  shortcut: { ctrl: true, shift: true, alt: false, key: 's' },
   smallStep: 0.1,
   largeStep: 0.5,
-  presets: [1, 1.5, 2, 3, 4],
+  minSpeed: 0.5,
+  maxSpeed: 4
 }
 
 function mergeKbSettings(saved) {
-  const merged = Object.assign({}, DEFAULTS, saved)
-  merged.presets = DEFAULTS.presets.map((def, i) =>
-    saved.presets && saved.presets[i] != null ? saved.presets[i] : def,
-  )
-  return merged
+  return Object.assign({}, DEFAULTS, saved)
 }
 
 chrome.storage.local.get(['playbackRate', 'kbSettings'], (data) => {
@@ -40,6 +37,7 @@ setInterval(() => {
 if (window === window.top) {
   let overlayEl = null
   let hideTimer = null
+  let inputBuffer = ''
 
   function getOrCreateOverlay() {
     if (!overlayEl) {
@@ -64,15 +62,23 @@ if (window === window.top) {
     return overlayEl
   }
 
-  function showFlash(rate) {
+  function renderOverlay() {
     const el = getOrCreateOverlay()
-    el.innerHTML =
-      '<div style="font-size:22px;font-weight:700;letter-spacing:-0.01em">' +
-      rate +
-      'x</div>' +
-      '<div style="font-size:10px;font-weight:500;opacity:0.8;margin-top:4px;letter-spacing:0.03em">' +
-      '\u2191\u2193 adjust \u00b7 Shift+scroll \u00d7 step \u00b7 1\u20135 presets \u00b7 Esc to close' +
-      '</div>'
+    if (inputBuffer) {
+      el.innerHTML =
+        '<div style="font-size:22px;font-weight:700;letter-spacing:-0.01em">' +
+        inputBuffer + '<span style="opacity:0.5">|</span></div>' +
+        '<div style="font-size:10px;font-weight:500;opacity:0.8;margin-top:4px;letter-spacing:0.03em">' +
+        'Enter to confirm \u00b7 Esc to cancel' +
+        '</div>'
+    } else {
+      el.innerHTML =
+        '<div style="font-size:22px;font-weight:700;letter-spacing:-0.01em">' +
+        currentRate + 'x</div>' +
+        '<div style="font-size:10px;font-weight:500;opacity:0.8;margin-top:4px;letter-spacing:0.03em">' +
+        '\u2191\u2193 adjust \u00b7 Shift+scroll large step \u00b7 Esc to close' +
+        '</div>'
+    }
     el.style.opacity = '1'
     clearTimeout(hideTimer)
     hideTimer = setTimeout(() => {
@@ -82,23 +88,42 @@ if (window === window.top) {
   }
 
   function applyRate(rate) {
-    rate = Math.max(0.1, Math.min(64, Math.round(rate * 100) / 100))
+    rate = Math.max(kbSettings.minSpeed, Math.min(kbSettings.maxSpeed, Math.round(rate * 100) / 100))
     currentRate = rate
+    inputBuffer = ''
     chrome.storage.local.set({ playbackRate: rate })
     chrome.runtime.sendMessage({ type: 'rateChanged', rate }).catch(() => {})
-    document
-      .querySelectorAll('audio, video')
-      .forEach((m) => (m.playbackRate = rate))
-    showFlash(rate)
+    document.querySelectorAll('audio, video').forEach((m) => (m.playbackRate = rate))
+    renderOverlay()
   }
 
   // Speed-control keydown — only registered while active
   function onControlKeydown(e) {
     const tag = e.target.tagName
-    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable)
-      return
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return
 
-    if (e.key === 'ArrowUp') {
+    if (/^[0-9]$/.test(e.key)) {
+      e.preventDefault()
+      e.stopPropagation()
+      inputBuffer += e.key
+      renderOverlay()
+    } else if (e.key === '.' && !inputBuffer.includes('.')) {
+      e.preventDefault()
+      e.stopPropagation()
+      inputBuffer += '.'
+      renderOverlay()
+    } else if (e.key === 'Backspace') {
+      e.preventDefault()
+      e.stopPropagation()
+      inputBuffer = inputBuffer.slice(0, -1)
+      renderOverlay()
+    } else if (e.key === 'Enter') {
+      e.preventDefault()
+      e.stopPropagation()
+      const v = parseFloat(inputBuffer)
+      if (!isNaN(v) && v > 0) applyRate(v)
+      else { inputBuffer = ''; renderOverlay() }
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault()
       e.stopPropagation()
       applyRate(currentRate + kbSettings.smallStep)
@@ -106,15 +131,11 @@ if (window === window.top) {
       e.preventDefault()
       e.stopPropagation()
       applyRate(currentRate - kbSettings.smallStep)
-    } else if (e.key >= '1' && e.key <= '5') {
-      e.preventDefault()
-      e.stopPropagation()
-      const preset = kbSettings.presets[Number.parseInt(e.key) - 1]
-      if (preset != null) applyRate(preset)
     } else if (e.key === 'Escape') {
       e.preventDefault()
       e.stopPropagation()
-      deactivateControls(true)
+      if (inputBuffer) { inputBuffer = ''; renderOverlay() }
+      else deactivateControls(true)
     }
   }
 
@@ -139,12 +160,13 @@ if (window === window.top) {
       passive: false,
       capture: true,
     })
-    showFlash(currentRate)
+    renderOverlay()
   }
 
   function deactivateControls(hideOverlay) {
     if (!isActive) return
     isActive = false
+    inputBuffer = ''
     document.removeEventListener('keydown', onControlKeydown, true)
     document.removeEventListener('wheel', onControlWheel, { capture: true })
     if (hideOverlay && overlayEl) {
