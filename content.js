@@ -1,165 +1,175 @@
 // Content script - handles storage, sets playback rate, keyboard overlay
-let currentRate = 2;
-let kbSettings = {
+let currentRate = 2
+let kbSettings = null
+let isActive = false
+
+const DEFAULTS = {
   shortcut: { ctrl: true, shift: true, alt: false, key: '.' },
-  step: 0.25,
-  minSpeed: 0.25,
-  maxSpeed: 3,
-  showOverlay: true
-};
+  smallStep: 0.1,
+  largeStep: 0.5,
+  presets: [1, 1.5, 2, 3, 4],
+}
+
+function mergeKbSettings(saved) {
+  const merged = Object.assign({}, DEFAULTS, saved)
+  merged.presets = DEFAULTS.presets.map((def, i) =>
+    saved.presets && saved.presets[i] != null ? saved.presets[i] : def,
+  )
+  return merged
+}
 
 chrome.storage.local.get(['playbackRate', 'kbSettings'], (data) => {
-  currentRate = data.playbackRate || 2;
-  if (data.kbSettings) Object.assign(kbSettings, data.kbSettings);
-});
+  currentRate = data.playbackRate || 2
+  kbSettings = mergeKbSettings(data.kbSettings || {})
+})
 
 chrome.storage.onChanged.addListener((changes) => {
-  if (changes.playbackRate) currentRate = changes.playbackRate.newValue;
-  if (changes.kbSettings) Object.assign(kbSettings, changes.kbSettings.newValue);
-});
+  if (changes.playbackRate) currentRate = changes.playbackRate.newValue
+  if (changes.kbSettings)
+    kbSettings = mergeKbSettings(changes.kbSettings.newValue || {})
+})
 
+// Only write playbackRate when it differs, reducing unnecessary property sets across all frames
 setInterval(() => {
-  document.querySelectorAll('audio, video').forEach(media => {
-    media.playbackRate = currentRate;
-  });
-}, 1000);
+  document.querySelectorAll('audio, video').forEach((m) => {
+    if (m.playbackRate !== currentRate) m.playbackRate = currentRate
+  })
+}, 1000)
 
-// ---- Keyboard Speed Overlay ----
+// Flash overlay and keyboard controls — top frame only
+if (window === window.top) {
+  let overlayEl = null
+  let hideTimer = null
 
-let overlayEl = null;
-let overlayActive = false;
-let inputBuffer = '';
-let inactivityTimer = null;
-
-function getOrCreateOverlay() {
-  if (!overlayEl) {
-    overlayEl = document.createElement('div');
-    overlayEl.id = '__pf_overlay__';
-    overlayEl.style.cssText = [
-      'position:fixed',
-      'top:16px',
-      'right:16px',
-      'background:rgba(0,0,0,0.82)',
-      'color:#fff',
-      'border-radius:10px',
-      'padding:12px 24px',
-      'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
-      'text-align:center',
-      'z-index:2147483647',
-      'pointer-events:none',
-      'min-width:130px',
-      'box-shadow:0 4px 16px rgba(0,0,0,0.4)',
-      'transition:opacity 0.15s ease',
-      'opacity:0'
-    ].join(';');
-    (document.body || document.documentElement).appendChild(overlayEl);
-  }
-  return overlayEl;
-}
-
-function renderOverlay(rate, buffer) {
-  const el = getOrCreateOverlay();
-  const speedText = buffer !== undefined
-    ? (buffer === '' ? '\u2014' : buffer + 'x')
-    : rate.toFixed(2) + 'x';
-  el.innerHTML =
-    '<div style="font-size:10px;font-weight:700;letter-spacing:.1em;color:#9ca3af;margin-bottom:6px">PLAYBACK SPEED</div>' +
-    '<div style="font-size:24px;font-weight:700;letter-spacing:-.5px">' + speedText + '</div>';
-}
-
-function showOverlay() {
-  if (!kbSettings.showOverlay) return;
-  overlayActive = true;
-  inputBuffer = '';
-  renderOverlay(currentRate);
-  const el = getOrCreateOverlay();
-  el.style.opacity = '0';
-  requestAnimationFrame(() => { el.style.opacity = '1'; });
-  resetInactivity();
-}
-
-function hideOverlay() {
-  overlayActive = false;
-  inputBuffer = '';
-  clearTimeout(inactivityTimer);
-  if (overlayEl) {
-    overlayEl.style.opacity = '0';
-    const el = overlayEl;
-    overlayEl = null;
-    setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, 150);
-  }
-}
-
-function resetInactivity() {
-  clearTimeout(inactivityTimer);
-  inactivityTimer = setTimeout(hideOverlay, 2000);
-}
-
-function applyRate(rate) {
-  const clamped = Math.max(kbSettings.minSpeed, Math.min(kbSettings.maxSpeed,
-    Math.round(rate * 100) / 100));
-  currentRate = clamped;
-  chrome.storage.local.set({ playbackRate: clamped });
-  return clamped;
-}
-
-function matchesActivationShortcut(e) {
-  const sc = kbSettings.shortcut;
-  const ctrlOk = sc.ctrl ? (e.ctrlKey || e.metaKey) : (!e.ctrlKey && !e.metaKey);
-  const shiftOk = sc.shift ? e.shiftKey : !e.shiftKey;
-  const altOk = (sc.alt || false) ? e.altKey : !e.altKey;
-  return ctrlOk && shiftOk && altOk && e.key === sc.key;
-}
-
-document.addEventListener('keydown', function(e) {
-  if (matchesActivationShortcut(e)) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    overlayActive ? hideOverlay() : showOverlay();
-    return;
+  function getOrCreateOverlay() {
+    if (!overlayEl) {
+      overlayEl = document.createElement('div')
+      overlayEl.style.cssText = [
+        'position:fixed',
+        'bottom:24px',
+        'right:24px',
+        'background:rgba(22,163,74,0.92)',
+        'color:#fff',
+        'border-radius:10px',
+        'padding:10px 18px',
+        'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif',
+        'z-index:2147483647',
+        'pointer-events:none',
+        'opacity:0',
+        'text-align:center',
+        'transition:opacity 0.15s ease',
+      ].join(';')
+      ;(document.body || document.documentElement).appendChild(overlayEl)
+    }
+    return overlayEl
   }
 
-  if (!overlayActive) return;
-  e.preventDefault();
-  e.stopImmediatePropagation();
-
-  switch (e.key) {
-    case 'ArrowRight':
-      inputBuffer = '';
-      applyRate(currentRate + kbSettings.step);
-      renderOverlay(currentRate);
-      resetInactivity();
-      break;
-    case 'ArrowLeft':
-      inputBuffer = '';
-      applyRate(currentRate - kbSettings.step);
-      renderOverlay(currentRate);
-      resetInactivity();
-      break;
-    case 'Enter':
-      if (inputBuffer) {
-        const v = parseFloat(inputBuffer);
-        if (!isNaN(v)) applyRate(v);
-      }
-      hideOverlay();
-      break;
-    case 'Escape':
-      hideOverlay();
-      break;
-    case 'Backspace':
-      inputBuffer = inputBuffer.slice(0, -1);
-      renderOverlay(currentRate, inputBuffer);
-      resetInactivity();
-      break;
-    default:
-      if (/^[0-9]$/.test(e.key)) {
-        inputBuffer += e.key;
-        renderOverlay(currentRate, inputBuffer);
-        resetInactivity();
-      } else if (e.key === '.' && !inputBuffer.includes('.')) {
-        inputBuffer += '.';
-        renderOverlay(currentRate, inputBuffer);
-        resetInactivity();
-      }
+  function showFlash(rate) {
+    const el = getOrCreateOverlay()
+    el.innerHTML =
+      '<div style="font-size:22px;font-weight:700;letter-spacing:-0.01em">' +
+      rate +
+      'x</div>' +
+      '<div style="font-size:10px;font-weight:500;opacity:0.8;margin-top:4px;letter-spacing:0.03em">' +
+      '\u2191\u2193 adjust \u00b7 Shift+scroll \u00d7 step \u00b7 1\u20135 presets \u00b7 Esc to close' +
+      '</div>'
+    el.style.opacity = '1'
+    clearTimeout(hideTimer)
+    hideTimer = setTimeout(() => {
+      el.style.opacity = '0'
+      deactivateControls(false)
+    }, 3000)
   }
-}, true);
+
+  function applyRate(rate) {
+    rate = Math.max(0.1, Math.min(64, Math.round(rate * 100) / 100))
+    currentRate = rate
+    chrome.storage.local.set({ playbackRate: rate })
+    chrome.runtime.sendMessage({ type: 'rateChanged', rate }).catch(() => {})
+    document
+      .querySelectorAll('audio, video')
+      .forEach((m) => (m.playbackRate = rate))
+    showFlash(rate)
+  }
+
+  // Speed-control keydown — only registered while active
+  function onControlKeydown(e) {
+    const tag = e.target.tagName
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable)
+      return
+
+    if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      e.stopPropagation()
+      applyRate(currentRate + kbSettings.smallStep)
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      e.stopPropagation()
+      applyRate(currentRate - kbSettings.smallStep)
+    } else if (e.key >= '1' && e.key <= '5') {
+      e.preventDefault()
+      e.stopPropagation()
+      const preset = kbSettings.presets[Number.parseInt(e.key) - 1]
+      if (preset != null) applyRate(preset)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      e.stopPropagation()
+      deactivateControls(true)
+    }
+  }
+
+  // Scroll handler — only registered while active
+  function onControlWheel(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    let raw
+    if (e.shiftKey) {
+      raw = e.deltaX // browser flips scroll to horizontal when Shift held, so reverse it
+    } else {
+      raw = e.deltaY
+    }
+    const step = e.shiftKey ? kbSettings.largeStep : kbSettings.smallStep
+    applyRate(currentRate + (raw < 0 ? step : -step))
+  }
+
+  function activateControls() {
+    isActive = true
+    document.addEventListener('keydown', onControlKeydown, true)
+    document.addEventListener('wheel', onControlWheel, {
+      passive: false,
+      capture: true,
+    })
+    showFlash(currentRate)
+  }
+
+  function deactivateControls(hideOverlay) {
+    if (!isActive) return
+    isActive = false
+    document.removeEventListener('keydown', onControlKeydown, true)
+    document.removeEventListener('wheel', onControlWheel, { capture: true })
+    if (hideOverlay && overlayEl) {
+      clearTimeout(hideTimer)
+      overlayEl.style.opacity = '0'
+    }
+  }
+
+  function matchesShortcut(e, sc) {
+    const ctrlOk = sc.ctrl ? e.ctrlKey || e.metaKey : !e.ctrlKey && !e.metaKey
+    const shiftOk = sc.shift ? e.shiftKey : !e.shiftKey
+    const altOk = sc.alt || false ? e.altKey : !e.altKey
+    return ctrlOk && shiftOk && altOk && e.key === sc.key
+  }
+
+  // Shortcut listener — always active, only for toggling the mode
+  document.addEventListener(
+    'keydown',
+    (e) => {
+      if (!kbSettings) return
+      if (!matchesShortcut(e, kbSettings.shortcut)) return
+      e.preventDefault()
+      e.stopImmediatePropagation()
+      isActive ? deactivateControls(true) : activateControls()
+    },
+    true,
+  )
+}

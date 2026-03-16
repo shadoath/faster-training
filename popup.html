@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -9,16 +10,39 @@
       padding: 16px;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #fff;
+      position: relative;
     }
 
-    .label {
+    .title {
       text-align: center;
-      font-size: 10px;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      color: #9ca3af;
+      color: #16a34a;
       margin-bottom: 10px;
+      letter-spacing: -0.01em;
     }
+
+    #gearBtn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #9ca3af;
+      border-radius: 5px;
+      transition: color 0.1s, background 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #gearBtn:hover { color: #374151; background: #f3f4f6; }
+    #gearBtn.open { color: #16a34a; background: #f0fdf4; }
 
     .controls {
       display: flex;
@@ -73,33 +97,11 @@
 
     /* Settings */
 
-    .settings-toggle {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      padding: 6px 0 0;
-      border-top: 1px solid #f3f4f6;
-      cursor: pointer;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      color: #9ca3af;
-      user-select: none;
-    }
-
-    .settings-toggle:hover { color: #6b7280; }
-
-    .settings-toggle .chevron {
-      font-size: 9px;
-      transition: transform 0.15s;
-    }
-
-    .settings-toggle.open .chevron { transform: rotate(180deg); }
-
     #settingsPanel {
       display: none;
-      margin-top: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #f3f4f6;
     }
 
     .setting-row {
@@ -143,20 +145,6 @@
       color: #92400e;
     }
 
-    .setting-row select {
-      flex: 1;
-      height: 26px;
-      padding: 0 4px;
-      font-size: 11px;
-      color: #374151;
-      border: 1px solid #e5e7eb;
-      border-radius: 5px;
-      background: #f9fafb;
-      cursor: pointer;
-    }
-
-    .setting-row select:focus { outline: none; border-color: #22c55e; }
-
     .setting-row input[type="number"] {
       flex: 1;
       height: 26px;
@@ -164,11 +152,18 @@
       font-weight: 600;
     }
 
-    .setting-row input[type="checkbox"] {
-      width: 14px;
-      height: 14px;
-      cursor: pointer;
-      accent-color: #22c55e;
+    .preset-inputs {
+      display: flex;
+      gap: 3px;
+      flex: 1;
+    }
+
+    .preset-inputs input[type="number"] {
+      width: 0;
+      flex: 1;
+      height: 26px;
+      font-size: 10px;
+      padding: 0 2px;
     }
 
     .footer {
@@ -189,44 +184,38 @@
   </style>
 </head>
 <body>
-  <div class="label">SPEED</div>
+  <div class="title">PlayFaster</div>
+  <button id="gearBtn" title="Settings">&#9881;</button>
   <div class="controls">
-    <button class="large" data-delta="-0.5">&lt;&lt;</button>
-    <button data-delta="-0.1">&lt;</button>
+    <button id="btnLargeDown">&lt;&lt;</button>
+    <button id="btnSmallDown">&lt;</button>
     <input type="number" id="speed" min="0.1" max="64" step="0.1">
-    <button data-delta="0.1">&gt;</button>
-    <button class="large" data-delta="0.5">&gt;&gt;</button>
-  </div>
-
-  <div class="settings-toggle" id="settingsToggle">
-    <span>SETTINGS</span>
-    <span class="chevron" id="chevron">▼</span>
+    <button id="btnSmallUp">&gt;</button>
+    <button id="btnLargeUp">&gt;&gt;</button>
   </div>
 
   <div id="settingsPanel">
     <div class="setting-row">
-      <span class="setting-label">Shortcut</span>
+      <span class="setting-label">Activate key</span>
       <input type="text" id="shortcutInput" readonly placeholder="Click to record…">
     </div>
     <div class="setting-row">
-      <span class="setting-label">Step</span>
-      <select id="stepSelect">
-        <option value="0.1">0.1x</option>
-        <option value="0.25">0.25x</option>
-        <option value="0.5">0.5x</option>
-      </select>
+      <span class="setting-label">Keys 1–5</span>
+      <div class="preset-inputs">
+        <input type="number" data-preset="0" min="0.1" max="64" step="0.1">
+        <input type="number" data-preset="1" min="0.1" max="64" step="0.1">
+        <input type="number" data-preset="2" min="0.1" max="64" step="0.1">
+        <input type="number" data-preset="3" min="0.1" max="64" step="0.1">
+        <input type="number" data-preset="4" min="0.1" max="64" step="0.1">
+      </div>
     </div>
     <div class="setting-row">
-      <span class="setting-label">Min speed</span>
-      <input type="number" id="minSpeed" min="0.1" max="2" step="0.05">
+      <span class="setting-label">Small step (&lt; &gt;)</span>
+      <input type="number" id="smallStep" min="0.05" max="2" step="0.05">
     </div>
     <div class="setting-row">
-      <span class="setting-label">Max speed</span>
-      <input type="number" id="maxSpeed" min="1" max="64" step="0.5">
-    </div>
-    <div class="setting-row">
-      <span class="setting-label">Show overlay</span>
-      <input type="checkbox" id="showOverlay">
+      <span class="setting-label">Large step (&lt;&lt; &gt;&gt;)</span>
+      <input type="number" id="largeStep" min="0.1" max="4" step="0.1">
     </div>
   </div>
 

@@ -23,3 +23,7 @@ chrome.storage.onChanged.addListener((changes) => {
     updateBadge(changes.playbackRate.newValue);
   }
 });
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (msg.type === 'rateChanged') updateBadge(msg.rate);
+});
