@@ -1,4 +1,4 @@
-# Play Faster
+# PlayFaster
 
 A Chrome extension that bypasses playback rate limits on e-learning platforms, specifically targeting EasyLlama courses hosted on Go1.
 
@@ -7,8 +7,8 @@ A Chrome extension that bypasses playback rate limits on e-learning platforms, s
 Many e-learning platforms limit video/audio playback speed to 2x to ensure learners don't rush through content. This extension:
 
 1. **Spoofs the `playbackRate` getter** - When the platform checks `media.playbackRate`, it always returns ≤2, even if the actual rate is higher
-2. **Sets your desired playback rate** - Automatically applies your selected speed (2x, 2.5x, 3x, or 4x) to all audio/video elements
-3. **Provides a simple popup UI** - Click the extension icon to select your speed
+2. **Sets your desired playback rate** - Automatically applies your selected speed (0.1x to 16x) to all audio/video elements
+3. **Provides a simple popup UI** - Click the extension icon to set your speed via direct input or increment buttons
 
 ## How the Rate Limiting Works (EasyLlama)
 
@@ -74,8 +74,7 @@ The playback rate setting needs to be shared across all frames.
 ├── inject.js          # Override code - runs in page context
 ├── content.js         # Storage handling and rate setting
 ├── popup.html         # Speed selection UI
-├── popup.js           # Popup logic
-└── script.js          # Original manual script (for reference)
+└── popup.js           # Popup logic
 ```
 
 ## Installation
@@ -89,5 +88,5 @@ The playback rate setting needs to be shared across all frames.
 
 1. Navigate to your e-learning course
 2. Click the extension icon
-3. Select your desired speed (2x, 2.5x, 3x, or 4x)
+3. Set your desired speed (0.1x–16x) via direct input, increment buttons, or mouse wheel
 4. The speed persists across page loads
