@@ -249,18 +249,19 @@
     }
     .popup-mock-icon {
       position: absolute;
-      top: -20px;
+      top: -18px;
       left: 50%;
       transform: translateX(-50%);
-      width: 40px;
-      height: 20px;
+      width: 44px;
+      height: 36px;
       background: #000;
       display: flex;
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
+      z-index: 1;
     }
     .popup-mock-icon svg {
-      margin-bottom: -1px;
+      display: block;
     }
     .popup-mock-gear {
       position: absolute;
@@ -337,18 +338,17 @@
     .overlay-mock {
       background: var(--blue);
       border-radius: 999px;
-      padding: 18px 28px;
+      padding: 12px 22px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      min-width: 300px;
+      gap: 8px;
     }
     .overlay-mock-controls {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 10px;
     }
     .overlay-arrow-btn {
       display: flex;
@@ -358,9 +358,9 @@
     }
     .overlay-arrow-btn svg { display: block; }
     .overlay-speed-circle {
-      width: 52px;
-      height: 52px;
-      border: 3px solid var(--ink);
+      width: 44px;
+      height: 44px;
+      border: 2.5px solid var(--ink);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -371,12 +371,12 @@
       font-family: "Montserrat", sans-serif;
       font-style: italic;
       font-weight: 900;
-      font-size: 20px;
+      font-size: 17px;
       color: var(--ink);
       line-height: 1;
     }
     .overlay-scroll-hint {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 900;
       font-style: italic;
       color: #000;
@@ -709,7 +709,7 @@
       .nav-links { display: none; }
       .hero { padding: 72px 20px 56px; }
       .mockup-area { flex-direction: column; align-items: center; }
-      .overlay-mock { min-width: auto; width: 100%; max-width: 300px; }
+      .overlay-mock { width: 100%; max-width: 260px; }
     }
   </style>
 </head>
@@ -737,7 +737,7 @@
   <section class="hero">
     <div class="hero-badge"><span class="badge-dot"></span> Version 2.0 — Now with keyboard overlay</div>
     <h1>Watch videos at <em>your</em> speed,<br>not theirs.</h1>
-    <p>PlayFaster unlocks playback on any website — from 0.1x to 64x. Keyboard overlay, customizable steps, works in every frame.</p>
+    <p>PlayFaster unlocks playback on any website — including platforms that enforce a speed limit. 0.1x to 64x, keyboard overlay, works in every frame.</p>
     <div class="hero-cta">
       <a href="https://chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih" class="btn btn-blue btn-hero" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="21.17" y1="8" x2="12" y2="8"/><line x1="3.95" y1="6.06" x2="8.54" y2="14"/><line x1="10.88" y1="21.94" x2="15.46" y2="14"/></svg>
@@ -806,14 +806,14 @@
           <div class="overlay-mock-controls">
             <!-- Large back -->
             <div class="overlay-arrow-btn">
-              <svg width="26" height="20" viewBox="0 0 28 20" fill="#0f172a" aria-hidden="true">
+              <svg width="20" height="16" viewBox="0 0 28 20" fill="#0f172a" aria-hidden="true">
                 <polygon points="14,2 2,10 14,18"/>
                 <polygon points="26,2 14,10 26,18"/>
               </svg>
             </div>
             <!-- Small back -->
             <div class="overlay-arrow-btn">
-              <svg width="15" height="20" viewBox="0 0 16 20" fill="#0f172a" aria-hidden="true">
+              <svg width="12" height="16" viewBox="0 0 16 20" fill="#0f172a" aria-hidden="true">
                 <polygon points="14,2 2,10 14,18"/>
               </svg>
             </div>
@@ -823,13 +823,13 @@
             </div>
             <!-- Small fwd -->
             <div class="overlay-arrow-btn">
-              <svg width="15" height="20" viewBox="0 0 16 20" fill="#0f172a" aria-hidden="true">
+              <svg width="12" height="16" viewBox="0 0 16 20" fill="#0f172a" aria-hidden="true">
                 <polygon points="2,2 14,10 2,18"/>
               </svg>
             </div>
             <!-- Large fwd -->
             <div class="overlay-arrow-btn">
-              <svg width="26" height="20" viewBox="0 0 28 20" fill="#0f172a" aria-hidden="true">
+              <svg width="20" height="16" viewBox="0 0 28 20" fill="#0f172a" aria-hidden="true">
                 <polygon points="2,2 14,10 2,18"/>
                 <polygon points="14,2 26,10 14,18"/>
               </svg>
@@ -921,7 +921,7 @@
       <div class="feature-card">
         <div class="feature-icon">🌐</div>
         <h3>Works in every frame</h3>
-        <p>Handles cross-origin iframes and embedded players. If there's a video or audio element, PlayFaster controls it.</p>
+        <p>Handles cross-origin iframes and embedded players — works on platforms where other speed controllers give up.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">🔒</div>
@@ -945,7 +945,7 @@
       <div class="audience-card">
         <div class="audience-icon">💼</div>
         <h3>Professionals</h3>
-        <p>Get through mandatory training videos in a fraction of the time.</p>
+        <p>Speed through compliance training — even on platforms that cap you at 2x.</p>
       </div>
       <div class="audience-card">
         <div class="audience-icon">🎬</div>
@@ -1023,7 +1023,7 @@
   <!-- CTA -->
   <section class="cta">
     <h2>Stop being limited to <em>2x.</em></h2>
-    <p>Join thousands of fast learners, busy professionals, and power users who play faster.</p>
+    <p>Join the learners, professionals, and power users who refuse to let platforms decide how fast they work.</p>
     <a href="https://chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih" class="btn btn-blue btn-cta" target="_blank" rel="noopener">
       Add to Chrome — It's Free
     </a>
