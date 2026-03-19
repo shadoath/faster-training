@@ -4,9 +4,9 @@
   <img src="icon-128.png" alt="PlayFaster" width="128" height="128">
 </p>
 
-**Break free from the 2× limit.** PlayFaster is a Chrome extension that lets you set *any* playback speed from 0.1× to 64× on YouTube, Vimeo, Loom, corporate training portals, and more.
+**Break free from the 2× limit.** PlayFaster is a Chrome extension that lets you set _any_ playback speed from 0.1× to 64× on YouTube, Vimeo, Loom, corporate training portals, and more.
 
-> 🔗 **Install from the Chrome Web Store:** [chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih](https://chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih)  \
+> 🔗 **Install from the Chrome Web Store:** [chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih](https://chromewebstore.google.com/detail/playfaster/fppcbkhpahkbgijkdcpjgjmhpfbmfiih) \
 > 🌐 **Landing page & screenshots:** [https://playfaster.app](https://playfaster.app)
 
 ## Features
@@ -67,6 +67,7 @@ For developers interested in how this works, see [CLAUDE.md](CLAUDE.md) for impl
 ## Privacy
 
 This extension:
+
 - ✓ Stores your speed preference locally
 - ✓ Only affects video playback on pages you visit
 - ✗ Does NOT collect or transmit any data

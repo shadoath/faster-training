@@ -1,9 +1,6 @@
-CHROME WEB STORE LISTING
-========================
+# CHROME WEB STORE LISTING
 
-
-EXTENSION DETAILS
------------------
+## EXTENSION DETAILS
 
 Extension Name:
 PlayFaster
@@ -17,9 +14,7 @@ Productivity
 Language:
 English (United States)
 
-
-DETAILED DESCRIPTION
---------------------
+## DETAILED DESCRIPTION
 
 PlayFaster gives you complete control over media playback speed across all websites.
 
@@ -39,6 +34,7 @@ PERFECT FOR:
 • Anyone with accessibility needs who processes audio better at different speeds
 
 HOW TO USE:
+
 1. Click the extension icon while on any video or audio page
 2. Adjust speed using buttons (< > for 0.1x, << >> for 0.5x)
 3. Or type any value directly (0.1 to 64)
@@ -55,9 +51,7 @@ Take control of your learning pace. Never be limited by arbitrary speed restrict
 
 Perfect for YouTube, Vimeo, Loom, Udemy, Coursera, LinkedIn Learning, and any other video or audio platform.
 
-
-PRIVACY POLICY (short version for store listing)
--------------------------------------------------
+## PRIVACY POLICY (short version for store listing)
 
 PRIVACY POLICY
 
@@ -80,18 +74,14 @@ Last updated: February 2026
 Privacy Policy URL:
 https://github.com/Whiteboard-Works/play-faster/blob/master/PRIVACY.md
 
-
-PROMOTIONAL TILE TEXT (for images)
------------------------------------
+## PROMOTIONAL TILE TEXT (for images)
 
 Control Your Speed
 0.1x to 64x
 
 Watch Smarter, Not Slower
 
-
-TAGLINE OPTIONS
----------------
+## TAGLINE OPTIONS
 
 Your videos, your speed, your way
 Speed up learning without slowing down comprehension
@@ -99,9 +89,7 @@ Because 2x isn't always fast enough
 Take control of your learning pace
 Power user speed controls for any video
 
-
-TAGS / KEYWORDS
----------------
+## TAGS / KEYWORDS
 
 video speed control
 playback speed
@@ -119,9 +107,7 @@ slow motion
 training videos
 educational videos
 
-
-JUSTIFICATION FOR PERMISSIONS
-------------------------------
+## JUSTIFICATION FOR PERMISSIONS
 
 Storage:
 Required to save your playback speed preference so it persists across browser sessions and page reloads.
@@ -135,15 +121,11 @@ Required to detect when pages with video/audio content load so we can apply your
 Host Permissions (<all_urls>):
 activeTab cannot be used here because the extension must apply the user's saved speed preference automatically at page load (document_start), before any user gesture occurs. Additionally, videos on training platforms are frequently embedded in cross-origin iframes (e.g. a course page on one domain embeds a video player from another domain). Chrome's content script injection with all_frames: true requires host permissions for every frame origin, which are unknown in advance and vary by platform. There is no narrower permission that achieves this functionality.
 
-
-SINGLE PURPOSE DESCRIPTION
----------------------------
+## SINGLE PURPOSE DESCRIPTION
 
 This extension's single purpose is to provide enhanced playback speed control for video and audio elements on web pages, allowing users to watch and listen to content at their preferred speed.
 
-
-TARGET AUDIENCE
----------------
+## TARGET AUDIENCE
 
 Primary Users:
 • Students and online learners
@@ -156,9 +138,7 @@ Primary Users:
 Age Rating:
 Everyone
 
-
-SUPPORT INFORMATION
--------------------
+## SUPPORT INFORMATION
 
 Support Email:
 info@playfaster.app
@@ -169,9 +149,7 @@ https://github.com/Whiteboard-Works/play-faster/issues
 Homepage URL:
 https://playfaster.app/
 
-
-VERSION HISTORY
----------------
+## VERSION HISTORY
 
 Version 1.0.2
 • Build script and documentation updates
@@ -185,9 +163,7 @@ Version 1.0 - Initial Release
 • Persistent speed preference across sessions
 • Works on all video and audio platforms
 
-
-SCREENSHOT CAPTIONS
---------------------
+## SCREENSHOT CAPTIONS
 
 Screenshot 1 - Popup Interface:
 Simple, intuitive speed controls - adjust by typing or using increment buttons
@@ -204,9 +180,7 @@ Perfect for e-learning and training videos
 Screenshot 5 - Fine Control:
 Mouse wheel support and 0.1x precision for perfect speed tuning
 
-
-RESPONSE TO COMMON REVIEW QUESTIONS
--------------------------------------
+## RESPONSE TO COMMON REVIEW QUESTIONS
 
 Q: Why does this need access to all websites? Why not use activeTab?
 A: The activeTab permission only grants access when the user explicitly clicks the extension icon - it cannot apply the saved speed preference automatically at page load. This extension must run at document_start so the playback rate override is in place before any media begins playing. Furthermore, videos are routinely embedded in cross-origin iframes (e.g. a training site on one domain embedding a video player from another). Chrome requires explicit host permissions to inject content scripts into each iframe origin, which cannot be known in advance. The <all_urls> permission is the minimum required for the extension to function correctly.
@@ -220,9 +194,7 @@ A: This extension provides accessibility and usability features. Many users need
 Q: Does this collect user data?
 A: No. The extension only stores the user's speed preference locally using Chrome's storage API. No data is transmitted anywhere.
 
-
-NOTES FOR SUBMISSION
----------------------
+## NOTES FOR SUBMISSION
 
 • Test on multiple platforms before submitting (YouTube, Vimeo, training sites)
 • Prepare 3-5 high-quality screenshots showing the extension in action

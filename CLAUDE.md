@@ -16,11 +16,11 @@ EasyLlama's code includes a check that runs every 3 seconds:
 
 ```javascript
 setInterval(() => {
-  let rate = mediaElement.playbackRate;
+  let rate = mediaElement.playbackRate
   if (rate !== undefined && rate > 2) {
-    window.location.reload();
+    window.location.reload()
   }
-}, 3000);
+}, 3000)
 ```
 
 This reloads the page whenever it detects a playback rate above 2x.
@@ -30,16 +30,16 @@ This reloads the page whenever it detects a playback rate above 2x.
 We override `HTMLMediaElement.prototype.playbackRate` with a spoofed getter:
 
 ```javascript
-const desc = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'playbackRate');
-Object.defineProperty(HTMLMediaElement.prototype, 'playbackRate', {
-  get: function() {
-    const real = desc.get.call(this);
-    return real > 2 ? 2 : real;  // Lie to the checker
+const desc = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, "playbackRate")
+Object.defineProperty(HTMLMediaElement.prototype, "playbackRate", {
+  get: function () {
+    const real = desc.get.call(this)
+    return real > 2 ? 2 : real // Lie to the checker
   },
-  set: function(val) {
-    desc.set.call(this, val);    // Actually set the real value
-  }
-});
+  set: function (val) {
+    desc.set.call(this, val) // Actually set the real value
+  },
+})
 ```
 
 The setter applies the real rate, but the getter returns max 2. The platform's check sees "2" while audio plays at 3x.
@@ -47,21 +47,25 @@ The setter applies the real rate, but the getter returns max 2. The platform's c
 ## Obstacles Encountered
 
 ### 1. Cross-Origin Iframes
+
 The course content is nested in multiple cross-origin iframes (Go1 → SCORM adapter → EasyLlama). JavaScript's Same-Origin Policy prevents accessing these from the parent page.
 
 **Solution:** Chrome extensions with `all_frames: true` inject content scripts into every frame regardless of origin.
 
 ### 2. Content Script Isolation
+
 Chrome content scripts run in an isolated JavaScript context. Modifying `HTMLMediaElement.prototype` in the content script doesn't affect the page's prototype.
 
 **Solution:** Use `chrome.scripting.executeScript` with `world: 'MAIN'` to inject code directly into the page's JavaScript context.
 
 ### 3. Content Security Policy (CSP)
+
 The page's CSP blocks inline script injection (`<script>` elements with inline code).
 
 **Solution:** The `chrome.scripting` API with `world: 'MAIN'` bypasses CSP restrictions.
 
 ### 4. Cross-Frame Storage
+
 The playback rate setting needs to be shared across all frames.
 
 **Solution:** Use `chrome.storage.local` which is accessible from all content scripts, with `chrome.storage.onChanged` listeners to sync updates.
