@@ -79,8 +79,25 @@ The playback rate setting needs to be shared across all frames.
 ├── content.js         # Storage handling and rate setting
 ├── popup.html         # Speed selection UI
 ├── popup.js           # Popup logic
+├── eslint.config.mjs  # ESLint 9 flat config
+├── .prettierrc        # Prettier config
+├── .cursor/rules/     # AI enforcement (code-style.mdc)
 └── script.js          # Original manual script (for reference)
 ```
+
+## Lint & Format
+
+ESLint 9 (flat config) + Prettier. Run from project root:
+
+```bash
+npm install           # first-time setup
+npm run lint          # check lint
+npm run lint:fix      # auto-fix lint
+npm run format        # format with Prettier
+npm run format:check  # check formatting
+```
+
+Config: `eslint.config.mjs`, `.prettierrc`. `.cursor/rules/code-style.mdc` enforces these conventions for AI edits.
 
 ## Installation
 
