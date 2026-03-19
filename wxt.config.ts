@@ -3,12 +3,18 @@ import preact from "@preact/preset-vite"
 
 export default defineConfig({
   srcDir: "src",
+  dev: {
+    server: {
+      port: 3001,
+      strictPort: false, // automatically try next available port if 3001 is also in use
+    },
+  },
   vite: () => ({
     plugins: [preact()],
   }),
   manifest: {
     name: "PlayFaster",
-    version: "2.0.0",
+    version: "3.0.0",
     description:
       "Enhanced playback speed control for online videos and audio. Works on YouTube, Vimeo, Loom, and most e-learning platforms.",
     permissions: ["storage", "scripting", "webNavigation"],

@@ -190,10 +190,10 @@ export function App() {
           margin-top: 14px;
           text-align: center;
           font-size: 10px;
-          color: #374151;
+          color: var(--muted);
         }
-        .footer a { color: #374151; text-decoration: none; }
-        .footer a:hover { color: var(--muted); }
+        .footer a { color: var(--muted); text-decoration: none; }
+        .footer a:hover { color: var(--white); }
       `}</style>
     </div>
   )
