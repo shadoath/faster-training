@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks"
+import { useEffect, useRef, useState } from "preact/hooks"
 import { DEFAULT_KB_SETTINGS, DEFAULT_RATE } from "../../shared/defaults"
 import { getAll, setRate, setSettings } from "../../shared/storage"
 import type { KbSettings, Message } from "../../shared/types"
@@ -9,6 +9,14 @@ export function App() {
   const [rate, setLocalRate] = useState(DEFAULT_RATE)
   const [settings, setLocalSettings] = useState<KbSettings>(DEFAULT_KB_SETTINGS)
   const [settingsOpen, setSettingsOpen] = useState(false)
+
+  // Refs for access inside event listeners without stale closure
+  const rateRef = useRef(rate)
+  const settingsRef = useRef(settings)
+  rateRef.current = rate
+  settingsRef.current = settings
+
+  const lastWheelRef = useRef(0)
 
   useEffect(() => {
     getAll().then(({ rate: r, settings: s }) => {
@@ -26,17 +34,53 @@ export function App() {
       }
     }
     chrome.storage.onChanged.addListener(onChanged)
-    return () => chrome.storage.onChanged.removeListener(onChanged)
+
+    // Body-level wheel: adjust speed when not scrolling inside a form element
+    function onWheel(e: WheelEvent) {
+      if ((e.target as Element).closest("input, select, textarea")) return
+      e.preventDefault()
+      const now = Date.now()
+      if (now - lastWheelRef.current < 200) return
+      lastWheelRef.current = now
+      const raw = e.shiftKey ? -e.deltaX : e.deltaY
+      const step = e.shiftKey ? settingsRef.current.largeStep : settingsRef.current.smallStep
+      applyRateImmediate(rateRef.current + (raw < 0 ? step : -step))
+    }
+
+    // Body-level arrow keys: increment/decrement when not focused on a form element
+    function onKeyDown(e: KeyboardEvent) {
+      const tag = (document.activeElement as Element)?.tagName
+      if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return
+      if (e.key === "ArrowUp") {
+        e.preventDefault()
+        applyRateImmediate(rateRef.current + settingsRef.current.smallStep)
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault()
+        applyRateImmediate(rateRef.current - settingsRef.current.smallStep)
+      }
+    }
+
+    document.addEventListener("wheel", onWheel, { passive: false })
+    document.addEventListener("keydown", onKeyDown)
+
+    return () => {
+      chrome.storage.onChanged.removeListener(onChanged)
+      document.removeEventListener("wheel", onWheel)
+      document.removeEventListener("keydown", onKeyDown)
+    }
   }, [])
 
-  function applyRate(newRate: number) {
-    const clamped = Math.max(
-      settings.minSpeed,
-      Math.min(settings.maxSpeed, Math.round(newRate * 100) / 100),
-    )
+  function applyRateImmediate(newRate: number) {
+    const s = settingsRef.current
+    const clamped = Math.max(s.minSpeed, Math.min(s.maxSpeed, Math.round(newRate * 100) / 100))
+    rateRef.current = clamped
     setLocalRate(clamped)
     setRate(clamped)
     chrome.runtime.sendMessage({ type: "rateChanged", rate: clamped } as Message).catch(() => {})
+  }
+
+  function applyRate(newRate: number) {
+    applyRateImmediate(newRate)
   }
 
   function applySettings(updated: KbSettings) {

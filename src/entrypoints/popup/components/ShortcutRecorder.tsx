@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks"
+import { useRef, useState } from "preact/hooks"
 import type { KbSettings } from "../../../shared/types"
 
 const KEY_LABELS: Record<string, string> = {
@@ -31,14 +31,7 @@ interface Props {
 
 export function ShortcutRecorder({ shortcut, onChange }: Props) {
   const [recording, setRecording] = useState(false)
-
-  function startRecording() {
-    setRecording(true)
-  }
-
-  function stopRecording() {
-    setRecording(false)
-  }
+  const inputRef = useRef<HTMLInputElement>(null)
 
   function onKeyDown(e: KeyboardEvent) {
     if (!recording) return
@@ -47,7 +40,8 @@ export function ShortcutRecorder({ shortcut, onChange }: Props) {
 
     if (e.key === "Escape") {
       onChange(null)
-      stopRecording()
+      setRecording(false)
+      inputRef.current?.blur()
       return
     }
 
@@ -59,19 +53,21 @@ export function ShortcutRecorder({ shortcut, onChange }: Props) {
       alt: e.altKey,
       key: e.key,
     })
-    stopRecording()
+    setRecording(false)
+    inputRef.current?.blur()
   }
 
   return (
     <input
+      ref={inputRef}
       type="text"
       id="shortcutInput"
       class={recording ? "recording" : ""}
-      readonly
+      readOnly
       placeholder="Click to record · Esc to clear"
       value={recording ? "Press shortcut…" : formatShortcut(shortcut)}
-      onClick={startRecording}
-      onBlur={stopRecording}
+      onClick={() => setRecording(true)}
+      onBlur={() => setRecording(false)}
       onKeyDown={onKeyDown}
     />
   )

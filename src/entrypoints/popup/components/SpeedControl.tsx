@@ -1,3 +1,4 @@
+import { useRef } from "preact/hooks"
 import type { KbSettings } from "../../../shared/types"
 
 interface Props {
@@ -7,6 +8,8 @@ interface Props {
 }
 
 export function SpeedControl({ rate, settings, onRateChange }: Props) {
+  const lastWheelRef = useRef(0)
+
   function handleInputChange(e: Event) {
     const val = parseFloat((e.target as HTMLInputElement).value)
     if (!isNaN(val) && val > 0) onRateChange(val)
@@ -14,6 +17,9 @@ export function SpeedControl({ rate, settings, onRateChange }: Props) {
 
   function handleWheel(e: WheelEvent) {
     e.preventDefault()
+    const now = Date.now()
+    if (now - lastWheelRef.current < 200) return
+    lastWheelRef.current = now
     const delta = e.deltaY < 0 ? settings.smallStep : -settings.smallStep
     onRateChange(rate + delta)
   }
