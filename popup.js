@@ -26,9 +26,9 @@ function round(val) {
 function setRate(newRate) {
   const clampedRate = clamp(round(newRate), kbSettings.minSpeed, kbSettings.maxSpeed)
   input.value = clampedRate
-  chrome.storage.local.set({ playbackRate: newRate })
+  chrome.storage.local.set({ playbackRate: clampedRate })
   // Fix #2: notify background to update badge even if service worker was dormant
-  chrome.runtime.sendMessage({ type: "rateChanged", rate: newRate }).catch(() => {})
+  chrome.runtime.sendMessage({ type: "rateChanged", rate: clampedRate }).catch(() => {})
 }
 
 // Single storage read for faster popup load (was 2 separate async calls)
@@ -93,11 +93,12 @@ const KEY_LABELS = {
 }
 
 function formatShortcut(sc) {
+  if (!sc) return "None"
   const parts = []
   if (sc.ctrl) parts.push("Ctrl")
   if (sc.shift) parts.push("Shift")
   if (sc.alt) parts.push("Alt")
-  parts.push(KEY_LABELS[sc.key] || sc.key.toUpperCase())
+  parts.push(KEY_LABELS[sc.key] || (sc.key ? sc.key.toUpperCase() : "?"))
   return parts.join("+")
 }
 
@@ -143,6 +144,16 @@ shortcutInput.addEventListener("keydown", (e) => {
   if (!recordingShortcut) return
   e.preventDefault()
   e.stopPropagation()
+
+  if (e.key === "Escape") {
+    kbSettings.shortcut = null
+    recordingShortcut = false
+    shortcutInput.classList.remove("recording")
+    shortcutInput.value = "None"
+    shortcutInput.blur()
+    saveSettings()
+    return
+  }
 
   if (["Control", "Shift", "Alt", "Meta"].includes(e.key)) return
 
@@ -207,34 +218,7 @@ document.addEventListener("keydown", (e) => {
   }
 })
 
-// Fix #7: use e.target.closest() instead of activeElement to reliably detect input elements during wheel
-document.addEventListener(
-  "wheel",
-  (e) => {
-    if (e.target.closest("input, select, textarea")) return
-    e.preventDefault()
-    const raw = e.shiftKey ? -e.deltaX : e.deltaY
-    const step = e.shiftKey ? kbSettings.largeStep : kbSettings.smallStep
-    setRate((Number.parseFloat(input.value) || 2) + (raw < 0 ? step : -step))
-  },
-  { passive: false }
-)
-
-// Arrow keys work while popup is open
-document.addEventListener("keydown", (e) => {
-  const tag = document.activeElement?.tagName
-  if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return
-
-  if (e.key === "ArrowUp") {
-    e.preventDefault()
-    setRate((Number.parseFloat(input.value) || 2) + kbSettings.smallStep)
-  } else if (e.key === "ArrowDown") {
-    e.preventDefault()
-    setRate((Number.parseFloat(input.value) || 2) - kbSettings.smallStep)
-  }
-})
-
-// Fix #7: use e.target.closest() instead of activeElement to reliably detect input elements during wheel
+// Wheel to adjust speed (use closest() to reliably detect input focus during wheel)
 document.addEventListener(
   "wheel",
   (e) => {

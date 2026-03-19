@@ -184,6 +184,7 @@ if (window === window.top) {
   }
 
   function matchesShortcut(e, sc) {
+    if (!sc) return false
     const ctrlOk = sc.ctrl ? e.ctrlKey || e.metaKey : !e.ctrlKey && !e.metaKey
     const shiftOk = sc.shift ? e.shiftKey : !e.shiftKey
     const altOk = sc.alt ? e.altKey : !e.altKey
