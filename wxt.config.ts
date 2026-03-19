@@ -1,0 +1,46 @@
+import { defineConfig } from "wxt"
+import preact from "@preact/preset-vite"
+
+export default defineConfig({
+  srcDir: "src",
+  vite: () => ({
+    plugins: [preact()],
+  }),
+  manifest: {
+    name: "PlayFaster",
+    version: "2.0.0",
+    description:
+      "Enhanced playback speed control for online videos and audio. Works on YouTube, Vimeo, Loom, and most e-learning platforms.",
+    permissions: ["storage", "scripting", "webNavigation"],
+    host_permissions: ["<all_urls>"],
+    action: {
+      default_popup: "popup.html",
+      default_icon: {
+        "16": "icon-16.png",
+        "48": "icon-48.png",
+        "128": "icon-128.png",
+      },
+    },
+    icons: {
+      "16": "icon-16.png",
+      "48": "icon-48.png",
+      "128": "icon-128.png",
+    },
+    web_accessible_resources: [
+      {
+        resources: ["inject.js", "icons/big-step.png", "icons/small-step.png"],
+        matches: ["<all_urls>"],
+      },
+    ],
+    browser_specific_settings: {
+      gecko: {
+        id: "play-faster@whiteboardworks.com",
+        strict_min_version: "142.0",
+        data_collection_permissions: {
+          required: ["none"],
+          optional: [],
+        },
+      },
+    },
+  },
+})
