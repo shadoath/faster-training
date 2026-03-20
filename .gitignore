@@ -6,6 +6,11 @@ node_modules/
 build/
 *.zip
 
+# WXT build output and generated types
+.output/
+.wxt/
+
 PLAN.md
 BUSINESS_PLAN.md
 AGENT_PLAN.md
+OPENCLAW_BOOTSTRAP.md

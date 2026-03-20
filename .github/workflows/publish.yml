@@ -1,0 +1,67 @@
+name: Publish to stores
+
+# Triggered by pushing a version tag: git tag v3.1.0 && git push origin v3.1.0
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  # ─── Chrome Web Store ────────────────────────────────────────────────────────
+  publish-chrome:
+    name: Chrome Web Store
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Chrome zip
+        run: npm run zip
+
+      # WXT names the zip {package-name}-{version}-chrome.zip — find it dynamically
+      - name: Locate zip
+        id: zip
+        run: echo "name=$(basename .output/*-chrome.zip)" >> $GITHUB_OUTPUT
+
+      - name: Upload and publish to Chrome Web Store
+        uses: tarnados/chrome-webstore-upload-action@v2
+        with:
+          file-name: .output/${{ steps.zip.outputs.name }}
+          extension-id: ${{ secrets.CHROME_EXTENSION_ID }}
+          client-id: ${{ secrets.CHROME_CLIENT_ID }}
+          client-secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+          refresh-token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+  # ─── Firefox Add-ons ─────────────────────────────────────────────────────────
+  publish-firefox:
+    name: Firefox Add-ons
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Builds to .output/firefox-mv2/
+      - name: Build Firefox extension
+        run: npm run build:firefox
+
+      # WEB_EXT_API_KEY / WEB_EXT_API_SECRET are the native env vars web-ext reads.
+      # --channel=listed submits for AMO review (no auto-publish until review passes).
+      - name: Submit to Firefox Add-ons
+        run: npx web-ext sign --channel=listed --source-dir=.output/firefox-mv2/
+        env:
+          WEB_EXT_API_KEY: ${{ secrets.FIREFOX_API_KEY }}
+          WEB_EXT_API_SECRET: ${{ secrets.FIREFOX_API_SECRET }}

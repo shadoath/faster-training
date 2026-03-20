@@ -1,0 +1,75 @@
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.btnIcon {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  opacity: 0.65;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+.btnIcon:hover {
+  opacity: 1;
+  background: var(--blue-faint);
+}
+
+.btnIcon img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+.btnIcon.large img {
+  height: 30px;
+}
+
+.flipH {
+  transform: scaleX(-1);
+}
+
+.speedCircle {
+  width: 60px;
+  height: 60px;
+  background: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.speed {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--ink);
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.speed::-webkit-outer-spin-button,
+.speed::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

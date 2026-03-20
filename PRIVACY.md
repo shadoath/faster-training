@@ -121,7 +121,7 @@ If you uninstall the Extension, your locally stored speed preference is automati
 
 If you have questions about this privacy policy or the Extension's operation, please:
 
-- Open an issue on GitHub: https://github.com/Whiteboard-Works/play-faster
+- Open an issue on GitHub: https://github.com/whiteboard-works/play-faster
 - Email: info@playfaster.app
 
 ## Compliance
