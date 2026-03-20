@@ -37,7 +37,7 @@ export function App() {
     chrome.storage.onChanged.addListener(onChanged)
 
     // Body-level wheel: adjust speed when not scrolling inside a form element
-    function onWheel(e: WheelEvent) {
+    const onWheel = (e: WheelEvent) => {
       if ((e.target as Element).closest("input, select, textarea")) return
       e.preventDefault()
       const now = Date.now()
@@ -49,7 +49,7 @@ export function App() {
     }
 
     // Body-level arrow keys: increment/decrement when not focused on a form element
-    function onKeyDown(e: KeyboardEvent) {
+    const onKeyDown = (e: KeyboardEvent) => {
       const tag = (document.activeElement as Element)?.tagName
       if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return
       if (e.key === "ArrowUp") {
@@ -71,7 +71,7 @@ export function App() {
     }
   }, [])
 
-  function applyRateImmediate(newRate: number) {
+  const applyRateImmediate = (newRate: number) => {
     const s = settingsRef.current
     const clamped = Math.max(s.minSpeed, Math.min(s.maxSpeed, Math.round(newRate * 100) / 100))
     rateRef.current = clamped
@@ -80,11 +80,11 @@ export function App() {
     chrome.runtime.sendMessage({ type: "rateChanged", rate: clamped } as Message).catch(() => {})
   }
 
-  function applyRate(newRate: number) {
+  const applyRate = (newRate: number) => {
     applyRateImmediate(newRate)
   }
 
-  function applySettings(updated: KbSettings) {
+  const applySettings = (updated: KbSettings) => {
     setLocalSettings(updated)
     setSettings(updated)
   }

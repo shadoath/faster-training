@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function SettingsPanel({ settings, onSettingsChange }: Props) {
-  function update(patch: Partial<KbSettings>) {
+  const update = (patch: Partial<KbSettings>) => {
     onSettingsChange({ ...settings, ...patch })
   }
 

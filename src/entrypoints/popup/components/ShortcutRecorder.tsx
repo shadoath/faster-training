@@ -15,7 +15,7 @@ const KEY_LABELS: Record<string, string> = {
   Tab: "Tab",
 }
 
-function formatShortcut(sc: KbSettings["shortcut"]): string {
+const formatShortcut = (sc: KbSettings["shortcut"]): string => {
   if (!sc) return "None"
   const parts: string[] = []
   if (sc.ctrl) parts.push("Ctrl")
@@ -34,7 +34,7 @@ export function ShortcutRecorder({ shortcut, onChange }: Props) {
   const [recording, setRecording] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  function onKeyDown(e: KeyboardEvent) {
+  const onKeyDown = (e: KeyboardEvent) => {
     if (!recording) return
     e.preventDefault()
     e.stopPropagation()
