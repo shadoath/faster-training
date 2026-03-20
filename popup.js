@@ -76,11 +76,14 @@ input.addEventListener("change", () => {
   setRate(Number.parseFloat(input.value) || 2)
 })
 
-input.addEventListener("wheel", throttle((e) => {
-  e.preventDefault()
-  const delta = e.deltaY < 0 ? kbSettings.smallStep : -kbSettings.smallStep
-  setRate((Number.parseFloat(input.value) || 2) + delta)
-}, 200))
+input.addEventListener(
+  "wheel",
+  throttle((e) => {
+    e.preventDefault()
+    const delta = e.deltaY < 0 ? kbSettings.smallStep : -kbSettings.smallStep
+    setRate((Number.parseFloat(input.value) || 2) + delta)
+  }, 200)
+)
 
 // ---- Settings Panel ----
 
@@ -192,7 +195,10 @@ document.querySelectorAll(".step-btn[data-action]").forEach((btn) => {
     const step = Number.parseFloat(input.step) || 0.1
     const dir = btn.dataset.action === "inc" ? 1 : -1
     const next = round((Number.parseFloat(input.value) || 0) + dir * step)
-    input.value = Math.min(Number.parseFloat(input.max), Math.max(Number.parseFloat(input.min), next))
+    input.value = Math.min(
+      Number.parseFloat(input.max),
+      Math.max(Number.parseFloat(input.min), next)
+    )
     input.dispatchEvent(new Event("change"))
   })
 })

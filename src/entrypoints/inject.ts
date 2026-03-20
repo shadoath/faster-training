@@ -5,7 +5,9 @@
 
 export default defineUnlistedScript(() => {
   if (typeof HTMLMediaElement === "undefined") return
-  if ((HTMLMediaElement.prototype as { __playbackRateOverridden?: boolean }).__playbackRateOverridden)
+  if (
+    (HTMLMediaElement.prototype as { __playbackRateOverridden?: boolean }).__playbackRateOverridden
+  )
     return
 
   const desc = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, "playbackRate")

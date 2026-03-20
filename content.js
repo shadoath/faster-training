@@ -63,19 +63,21 @@ if (window === window.top) {
       "transition:opacity 0.15s ease",
     ].join(";")
 
-    const btnStyle = (flip) => [
-      "background:none",
-      "border:none",
-      "padding:4px",
-      "cursor:pointer",
-      "display:flex",
-      "align-items:center",
-      "opacity:0.85",
-      flip ? "transform:scaleX(-1)" : "",
-    ].filter(Boolean).join(";")
+    const btnStyle = (flip) =>
+      [
+        "background:none",
+        "border:none",
+        "padding:4px",
+        "cursor:pointer",
+        "display:flex",
+        "align-items:center",
+        "opacity:0.85",
+        flip ? "transform:scaleX(-1)" : "",
+      ]
+        .filter(Boolean)
+        .join(";")
 
-    const imgStyle = (h) =>
-      `height:${h}px;width:auto;display:block;filter:brightness(0)`
+    const imgStyle = (h) => `height:${h}px;width:auto;display:block;filter:brightness(0)`
 
     const big = iconURL("big-step.png")
     const small = iconURL("small-step.png")
@@ -103,7 +105,6 @@ if (window === window.top) {
 
     // Prevent overlay wheel events from bubbling to the page
     overlayEl.addEventListener("wheel", (e) => e.stopPropagation())
-
     ;(document.body || document.documentElement).appendChild(overlayEl)
   }
 
@@ -119,9 +120,10 @@ if (window === window.top) {
     const hintEl = el.querySelector("#pf-hint")
 
     if (speedEl) speedEl.textContent = inputBuffer ? `${inputBuffer}|` : `${currentRate}`
-    if (hintEl) hintEl.textContent = inputBuffer
-      ? "Enter to confirm \u00b7 Esc to cancel"
-      : "Scroll to adjust speed"
+    if (hintEl)
+      hintEl.textContent = inputBuffer
+        ? "Enter to confirm \u00b7 Esc to cancel"
+        : "Scroll to adjust speed"
 
     el.style.opacity = "1"
     clearTimeout(hideTimer)

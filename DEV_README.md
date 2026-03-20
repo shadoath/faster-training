@@ -1,4 +1,40 @@
-# Developer Guide - Chrome Web Store Submission
+# Developer Guide
+
+## Automated Publishing
+
+`.github/workflows/publish.yml` publishes to both stores automatically when you push a version tag:
+
+```bash
+git tag v3.1.0
+git push origin v3.1.0
+```
+
+Both store jobs run in parallel. Chrome uploads and submits for review immediately. Firefox submits to AMO for review via `web-ext sign --channel=listed`.
+
+### Required GitHub Secrets
+
+Set these once in **Settings → Secrets and variables → Actions**:
+
+| Secret | Where to get it |
+|---|---|
+| `CHROME_EXTENSION_ID` | CWS dashboard URL: `...detail/.../`**`<id>`** |
+| `CHROME_CLIENT_ID` | Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Client |
+| `CHROME_CLIENT_SECRET` | Same OAuth client |
+| `CHROME_REFRESH_TOKEN` | Run the [CWS OAuth token exchange](https://developer.chrome.com/docs/webstore/using-api/#oauth) once to get a refresh token |
+| `FIREFOX_API_KEY` | [addons.mozilla.org/developers/addon/api/key](https://addons.mozilla.org/developers/addon/api/key/) — JWT Issuer |
+| `FIREFOX_API_SECRET` | Same page — JWT Secret |
+
+### Chrome OAuth one-time setup
+
+1. [Google Cloud Console](https://console.cloud.google.com) → create/select a project
+2. Enable the **Chrome Web Store API**
+3. Create an **OAuth 2.0 Client ID** (Web Application type), add `https://developers.google.com/oauthplayground` as an authorized redirect URI
+4. Go to [OAuth Playground](https://developers.google.com/oauthplayground) → gear icon → use your client ID/secret → authorize `https://www.googleapis.com/auth/chromewebstore`
+5. Exchange the auth code for tokens → copy the **Refresh token**
+
+---
+
+# Chrome Web Store Submission
 
 ## Extension Name
 

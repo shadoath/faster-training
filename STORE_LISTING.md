@@ -95,11 +95,11 @@ _Last updated: March 2026_
 
 ## Permissions Justification
 
-| Permission | Reason |
-|---|---|
-| `storage` | Saves your playback speed preference and settings so they persist across browser sessions and page reloads |
-| `scripting` | Injects the playback speed control into web pages and modifies video/audio elements |
-| `webNavigation` | Detects when pages with video/audio content load so the speed preference is applied automatically |
+| Permission                     | Reason                                                                                                                                                                                                                                      |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `storage`                      | Saves your playback speed preference and settings so they persist across browser sessions and page reloads                                                                                                                                  |
+| `scripting`                    | Injects the playback speed control into web pages and modifies video/audio elements                                                                                                                                                         |
+| `webNavigation`                | Detects when pages with video/audio content load so the speed preference is applied automatically                                                                                                                                           |
 | `host_permissions: <all_urls>` | activeTab cannot be used because the extension applies the saved speed at document_start, before any user gesture. Cross-origin iframes on training platforms require host permissions for every frame origin, which are unknown in advance |
 
 ---

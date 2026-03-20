@@ -60,7 +60,9 @@
   align-items: center;
   justify-content: center;
   opacity: 0.75;
-  transition: opacity 0.15s, background 0.15s;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
 }
 
 .gearBtn:hover {

@@ -230,7 +230,7 @@ export default defineContentScript({
     function applyRate(rate: number) {
       rate = Math.max(
         kbSettings.minSpeed,
-        Math.min(kbSettings.maxSpeed, Math.round(rate * 100) / 100),
+        Math.min(kbSettings.maxSpeed, Math.round(rate * 100) / 100)
       )
       currentRate = rate
       inputBuffer = ""
@@ -339,7 +339,7 @@ export default defineContentScript({
         e.stopImmediatePropagation()
         isActive ? deactivateControls(true) : activateControls()
       },
-      true,
+      true
     )
   },
 })
