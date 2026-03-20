@@ -1,5 +1,6 @@
 import { useRef } from "preact/hooks"
 import type { KbSettings } from "../../../shared/types"
+import styles from "./SpeedControl.module.css"
 
 interface Props {
   rate: number
@@ -25,26 +26,26 @@ export function SpeedControl({ rate, settings, onRateChange }: Props) {
   }
 
   return (
-    <div class="controls">
+    <div class={styles.controls}>
       <button
-        class="btn-icon large"
+        class={`${styles.btnIcon} ${styles.large}`}
         title="Large step back"
         onClick={() => onRateChange(rate - settings.largeStep)}
       >
-        <img src="icons/big-step.png" class="flip-h" alt="«" />
+        <img src="icons/big-step.png" class={styles.flipH} alt="«" />
       </button>
       <button
-        class="btn-icon"
+        class={styles.btnIcon}
         title="Small step back"
         onClick={() => onRateChange(rate - settings.smallStep)}
       >
-        <img src="icons/small-step.png" class="flip-h" alt="‹" />
+        <img src="icons/small-step.png" class={styles.flipH} alt="‹" />
       </button>
 
-      <div class="speed-circle">
+      <div class={styles.speedCircle}>
         <input
           type="number"
-          id="speed"
+          class={styles.speed}
           min={settings.minSpeed}
           max={settings.maxSpeed}
           step={settings.smallStep}
@@ -55,76 +56,19 @@ export function SpeedControl({ rate, settings, onRateChange }: Props) {
       </div>
 
       <button
-        class="btn-icon"
+        class={styles.btnIcon}
         title="Small step forward"
         onClick={() => onRateChange(rate + settings.smallStep)}
       >
         <img src="icons/small-step.png" alt="›" />
       </button>
       <button
-        class="btn-icon large"
+        class={`${styles.btnIcon} ${styles.large}`}
         title="Large step forward"
         onClick={() => onRateChange(rate + settings.largeStep)}
       >
         <img src="icons/big-step.png" alt="»" />
       </button>
-
-      <style>{`
-        .controls {
-          display: flex;
-          align-items: center;
-          justify-content: space-around;
-          width: 100%;
-          margin-bottom: 14px;
-        }
-        .btn-icon {
-          background: none;
-          border: none;
-          outline: none;
-          cursor: pointer;
-          padding: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 8px;
-          opacity: 0.65;
-          transition: opacity 0.15s, background 0.15s;
-        }
-        .btn-icon:hover { opacity: 1; background: var(--blue-faint); }
-        .btn-icon img { height: 28px; width: auto; display: block; }
-        .btn-icon.large img { height: 30px; }
-        .flip-h { transform: scaleX(-1); }
-        .speed-circle {
-          width: 60px;
-          height: 60px;
-          background: var(--white);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        #speed {
-          width: 72px;
-          height: 72px;
-          border-radius: 50%;
-          border: none;
-          background: transparent;
-          text-align: center;
-          font-family: "Montserrat", sans-serif;
-          font-size: 24px;
-          font-weight: 900;
-          font-style: italic;
-          color: var(--ink);
-          outline: none;
-          -moz-appearance: textfield;
-        }
-        #speed::-webkit-outer-spin-button,
-        #speed::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          margin: 0;
-        }
-      `}</style>
     </div>
   )
 }

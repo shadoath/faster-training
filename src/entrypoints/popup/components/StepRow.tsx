@@ -1,3 +1,5 @@
+import styles from "./StepRow.module.css"
+
 interface Props {
   label: string
   sublabel?: string
@@ -25,22 +27,22 @@ export function StepRow({ label, sublabel, id, value, min, max, step, onChange }
   }
 
   return (
-    <div class="setting-row">
-      <span class="setting-label">
+    <div class={styles.settingRow}>
+      <span class={styles.settingLabel}>
         {label}
         {sublabel && <small>{sublabel}</small>}
       </span>
-      <div class="step-control">
+      <div class={styles.stepControl}>
         <button
-          class="step-btn"
+          class={styles.stepBtn}
           onClick={() => clampedChange(value - step)}
           aria-label={`Decrease ${label}`}
         >
-          <img src="icons/blue-adjust-triangle.png" class="flip-h" alt="−" />
+          <img src="icons/blue-adjust-triangle.png" class={styles.flipH} alt="−" />
         </button>
         <input
           type="number"
-          class="step-input"
+          class={styles.stepInput}
           id={id}
           min={min}
           max={max}
@@ -49,7 +51,7 @@ export function StepRow({ label, sublabel, id, value, min, max, step, onChange }
           onChange={handleInputChange}
         />
         <button
-          class="step-btn"
+          class={styles.stepBtn}
           onClick={() => clampedChange(value + step)}
           aria-label={`Increase ${label}`}
         >

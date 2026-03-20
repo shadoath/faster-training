@@ -1,5 +1,6 @@
 import { useRef, useState } from "preact/hooks"
 import type { KbSettings } from "../../../shared/types"
+import styles from "./ShortcutRecorder.module.css"
 
 const KEY_LABELS: Record<string, string> = {
   ".": "Period",
@@ -61,8 +62,7 @@ export function ShortcutRecorder({ shortcut, onChange }: Props) {
     <input
       ref={inputRef}
       type="text"
-      id="shortcutInput"
-      class={recording ? "recording" : ""}
+      class={`${styles.shortcutInput}${recording ? ` ${styles.recording}` : ""}`}
       readOnly
       placeholder="Click to record · Esc to clear"
       value={recording ? "Press shortcut…" : formatShortcut(shortcut)}
