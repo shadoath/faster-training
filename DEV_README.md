@@ -106,7 +106,7 @@ FEATURES:
 • Fine-grained controls: adjust by 0.1x or 0.5x increments
 • Direct input: type any speed value for precision
 • Mouse wheel support: scroll to adjust speed quickly
-• Works everywhere: YouTube, Vimeo, Loom, training platforms, and more
+• Works everywhere: any website with HTML5 video or audio
 • Persistent: your preference saves across sessions
 
 PERFECT FOR:
@@ -180,7 +180,7 @@ A complete privacy policy has been created in `PRIVACY.md`.
 **To use it in the Chrome Web Store:**
 
 1. Push `PRIVACY.md` to your GitHub repository
-2. Get the raw GitHub URL: `https://github.com/Whiteboard-Works/play-faster/blob/master/PRIVACY.md`
+2. Get the raw GitHub URL: `https://github.com/whiteboard-works/play-faster/blob/master/PRIVACY.md`
 3. Paste this URL in the "Privacy Policy" field during Chrome Web Store submission
 
 **Summary:** The extension collects NO data. It only stores your playback speed preference locally on your device.

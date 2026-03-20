@@ -82,7 +82,7 @@ This extension:
 
 ## Support & links
 
-- Issues & feature requests: [GitHub Issues](https://github.com/Whiteboard-Works/play-faster/issues)
+- Issues & feature requests: [GitHub Issues](https://github.com/whiteboard-works/play-faster/issues)
 - Website & screenshots: [playfaster.app](https://playfaster.app)
 - Email: [info@playfaster.app](mailto:info@playfaster.app)
 
