@@ -71,7 +71,7 @@ The playback rate setting needs to be shared across all frames.
 
 **Solution:** Use `chrome.storage.local` which is accessible from all content scripts, with `chrome.storage.onChanged` listeners to sync updates.
 
-## Architecture (v2 — TypeScript + WXT + Preact)
+## Architecture (TypeScript + WXT + Preact)
 
 The extension is built with [WXT](https://wxt.dev) (Web Extension Tools) using TypeScript and Preact for the popup UI. All source lives in `src/`.
 
@@ -127,10 +127,6 @@ npm run lint:fix      # auto-fix
 npm run format        # Prettier
 npm run format:check  # check only
 ```
-
-## Legacy Files (v1)
-
-The original flat JS files (`background.js`, `content.js`, `inject.js`, `popup.html`, `popup.js`, `manifest.json`) remain at the repo root as the prior version. The WXT build outputs to `.output/` and does not use these files.
 
 ## Platform Adapters
 
